@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1"/>
+<title>Using the fetch API</title>
+<script type="text/javascript" src="fetch_movies_byform.js"></script>
+</head>
+<body>
+<p>This is the body of the document.</p>
+
+<form method="POST" accept-charset="UTF-8" id="form" enctype="multipart/form-data">
+    <input type="text" name="noMovies" placeholder="Number of Movies to dispay">
+<button type="submit">Send</button>
+</form>
+
+<p id="id_tag" class="user"></p>
+
+
+<script>
+const form = document.getElementById("form");
+var text = form[0];
+console.log("value in form is (in .html): " + text.value);
+form.addEventListener("submit", displayMovies());
+	
+</script>
+
+<!--  
+<script type="text/javascript">
+	displayMovies();
+	</script>
+-->
+	
+</body>
+</html>

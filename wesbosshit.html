@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Insert title here</title>
+<script type="text/javascript" src="JS_Static_Web_project.js"></script>
+</head>
+<body>
+  <p class="user"></p>
+  <script>
+    function handleError(err) {
+      console.log("OH NO!");
+      console.log(err);
+    }
+    const userEl = document.querySelector(".user");
+    const endpoint = "https://api.github.com/users/wesbos";
+    const wesPromise = fetch(endpoint);
+    wesPromise
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        console.log(data.blog);
+        console.log(data.name);
+        console.log(data.location);
+        userEl.textContent = `${data.name} - ${data.blog}`;
+      })
+      .catch(handleError);
+  </script>
+</body>
+</html>

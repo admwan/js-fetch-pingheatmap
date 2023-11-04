@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>On-demand PingerMatrix</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<link rel="stylesheet" type="text/css"
+	href="bootstrap/css/bootstrap.min.css" />
+
+<link href="css/pingermatrix.css" type="text/css" rel="stylesheet" />
+
+
+</head>
+<body>
+
+	<div class="container" style="min-height: 500px">
+
+		<div class="starter-template">
+			<h1>On-demand PingerMatrix</h1>
+
+			<form>
+				<div>
+					<input type="checkbox" id="pollServer" onclick="togglePoll()">
+					<label for="updateDataFromServer">Update Data from Server.</label>
+					</br> <input type="checkbox" id="readRMQ" onclick="toggleReadRMQ()">
+					<label for="updateDataFromServer">Read Ping Status Messages	from Queue.</label>
+					</br> <input type="checkbox" id="pingCooldown" onclick="togglePingCooldown()">
+					<label for="updateDataFromServer">Automatic Cooldown of Ping Heat.</label>
+				</div>
+				<div>
+					<!-- The button class attribute values are part of Bootstra's custom buttons, wherever the fuck that came from. See https://getbootstrap.com -->
+					<button type="submit" class="btn btn-success btn-lg">Refresh Options</button>
+				</div>
+			</form>
+
+			Column size: <span id="colSize"></span></br> Row size: <span id="rowSize"></span>
+			<table id="pingermatrix"></table>
+		</div>
+		<div id=error_response></div>
+	</div>
+
+	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery-3.7.1.js"></script>
+	<script>
+	$.ajax({
+        url: "http://localhost:8098/jsonpingheatmap",
+        method: "POST",
+        headers: { "Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*" },
+        success: function (data) {
+           console.log(JSON.stringify(data));
+		   pingermatrix=JSON.stringify(data);
+        },
+        error: function (data) {
+           console.log(JSON.stringify(data));
+        }
+});
+</script
+	<!--
+	<script type="text/javascript" src="js/ajax_functions.js"></script>
+-->
+</body>
+</html>
