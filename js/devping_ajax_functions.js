@@ -78,31 +78,18 @@ $(document).ready(function () {
 		console.log("Now in function sendreadqueuestatus with postRequestDataVal1 parameter set to: ", postData.postRequestDataVal1);
 
 		$.ajax({
-			type: "POST",
+	        url: "http://localhost:8098/plainjsonpingheatmap",
+			type: "GET",
+	        headers: { "Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*" },
 			contentType: "application/json",
-			url: "http:localhost:8088/jsonpingheatmap",
 			data: JSON.stringify(postData), // Je kan dit doen of alleen de regel hieronder en var postData hierboven weglaten.
 			dataType: 'json',
 			cache: false,
 
 			success: function (data) {
 
-				var qReadStatusFromServer = data["readStatus"];
-				var queuedMessages = data ["queuedMessages"];
-
-				console.log("Returned from POST with readStatus: ", qReadStatusFromServer);
-				console.log("Returned from POST with queuedMessages: ", queuedMessages);
+				console.log("Returned from GET" + JSON.stringify(data));
 				
-				// Test if the WebApp turned on the read-RMQ process!! Take action if it didn't work: TBD!!!
-				if ( ((qReadStatusFromServer === "ACTIVE") && readRMQ.checked) || ((qReadStatusFromServer == "IDLE") && !readRMQ.checked)) {
-					console.log("Checkbox status and Server status are CONSISTENT!")
-				}
-				else if (readRMQ.checked) {
-					console.log("ERROR: server read from queue status cannot be turned ON!")
-				} 
-				else {
-					console.log("ERROR: server read from queue status cannot be turned OFF!")
-				}
 			}, // end of block success: 
 
 			error: function (e) {
@@ -184,7 +171,7 @@ $(document).ready(function () {
 		$.ajax({
 			type: "POST",
 			contentType: "application/json",
-			url: "http://localhost:8085/show-pinger-matrix",
+			url: "/show-pinger-matrix",
 			data: JSON.stringify(postData), // Je kan dit doen of alleen de regel hieronder en var postData hierboven weglaten.
 			dataType: 'json',
 			cache: false,
@@ -234,8 +221,8 @@ $(document).ready(function () {
 						pingCellData = pingMatrixData[rowCounter*(colSize-1)+rowCounter+colCounter];
 
 										
-						console.log("pingCellData: ", pingCellData);
-						console.log("pingCellData.pingOrig: " + pingCellData.pingOrig);
+//						console.log("pingCellData: ", pingCellData);
+//						console.log("pingCellData.pingOrig: " + pingCellData.pingOrig);
 
 					
 						var cellId = 'tdId_' + rowCounter + '_' + colCounter;

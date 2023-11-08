@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
 <link rel="stylesheet" type="text/css"
-	href="bootstrap/css/bootstrap.min.css" />
+	href="webjars/bootstrap/3.3.7/css/bootstrap.min.css" />
 
 <link href="css/pingermatrix.css" type="text/css" rel="stylesheet" />
 
@@ -40,23 +40,9 @@
 		<div id=error_response></div>
 	</div>
 
-	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery-3.7.1.js"></script>
-	<script>
-	$.ajax({
-        url: "http://localhost:8098/jsonpingheatmap",
-        method: "POST",
-        headers: { "Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*" },
-        success: function (data) {
-           console.log(JSON.stringify(data));
-		   pingermatrix=JSON.stringify(data);
-        },
-        error: function (data) {
-           console.log(JSON.stringify(data));
-        }
-});
-</script
-	<!--
+	<script type="text/javascript" src="webjars/jquery/2.2.4/jquery.min.js"></script>
+
 	<script type="text/javascript" src="js/ajax_functions.js"></script>
--->
+
 </body>
 </html>
