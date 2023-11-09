@@ -43,117 +43,107 @@
 	<script type="text/javascript" src="webjars/jquery/3.7.1/jquery-3.7.1.js"></script>
 	<script>
 		$(document).ready(function () {
-		poll = function () {
-			$.ajax({
-				url: "http://localhost:8098/plainjsonpingheatmap",
-				method: "GET",
-				headers: {"Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*"},
-				success: function (data) {
-					console.log("Stringified data: " + JSON.stringify(data));
-					var pingNodeList = data["pingNodeList"];
-					console.log("Nodelist: " + pingNodeList);
+			poll = function () {
+				$.ajax({
+					url: "http://localhost:8098/plainjsonpingheatmap",
+					method: "GET",
+					headers: {"Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*"},
+					success: function (data) {
+						console.log("Stringified data: " + JSON.stringify(data));
+						var pingNodeList = data["pingNodeList"];
+						console.log("Nodelist: " + pingNodeList);
 
-					var updatematrix = $('#matrix-update-checked').checked;
-					var updatermq = $('#rmq-update-checked').checked;
+						var updatematrix = $('#matrix-update-checked').checked;
+						var updatermq = $('#rmq-update-checked').checked;
 
-					//				console.log('Update PingerMatrix checked: ', updatematrix);
-					//				console.log('Update RMQ checked: ', updatermq);
+						var pingMatrixData = data["pingMatrixData"];
+						var pingNodeList = data["pingNodeList"];
 
+						var colSize = pingNodeList.length;
+						var rowSize = pingNodeList.length;
 
-					var pingMatrixData = data["pingMatrixData"];
-					var pingNodeList = data["pingNodeList"];
+						console.log("colSize: ", colSize);
+						$('#colSize').replaceWith(colSize);
+						$("tr:has(td)").remove();
+						$('#rowSize').replaceWith(rowSize);
 
-					var colSize = pingNodeList.length;
-					var rowSize = pingNodeList.length;
-
-					console.log("colSize: ", colSize);
-					$('#colSize').replaceWith(colSize);
-					$("tr:has(td)").remove();
-					$('#rowSize').replaceWith(rowSize);
-					//				console.log("SUCCESS : ", data);
-
-					var tableRowHTML = '<tr><td>PingNodes</td>'; // first cell is empty
-					for (var colCounter = 0; colCounter < colSize; colCounter++) {
-						tableRowHTML += '<td>' + pingNodeList[colCounter] + '</td>';
-					}
-					tableRowHTML += '</tr>';
-
-					var pingMatrixData = data["pingMatrixData"];
-					var cellIdPingHeatMap = new Map();
-					var pingCellData;
-
-					for (var rowCounter = 0; rowCounter < rowSize; rowCounter++) {
-						tableRowHTML += '<tr>RowNo: <td>' + pingNodeList[rowCounter] + '</td>'; // One extra cell per row for the row counter. 
+						var tableRowHTML = '<tr><td>PingNodes</td>'; // first cell is empty
 						for (var colCounter = 0; colCounter < colSize; colCounter++) {
+							tableRowHTML += '<td>' + pingNodeList[colCounter] + '</td>';
+						}
+						tableRowHTML += '</tr>';
 
-							//						var pingCellDataTest = {pingorig : "WIN219",pingdest : "FEDSQ8",pingsucc : "1",pingdheat : "10"}
-							//						console.log("pingCellDataTest: " + pingCellDataTest);
-							//						console.log("pingCellDataTest.pingOrig: " + pingCellDataTest.pingOrig);
+						var pingMatrixData = data["pingMatrixData"];
+						var cellIdPingHeatMap = new Map();
+						var pingCellData;
 
-							pingCellData = pingMatrixData[rowCounter * (colSize - 1) + rowCounter + colCounter];
+						for (var rowCounter = 0; rowCounter < rowSize; rowCounter++) {
+							tableRowHTML += '<tr>RowNo: <td>' + pingNodeList[rowCounter] + '</td>'; // One extra cell per row for the row counter. 
+							for (var colCounter = 0; colCounter < colSize; colCounter++) {
+
+								pingCellData = pingMatrixData[rowCounter * (colSize - 1) + rowCounter + colCounter];
+
+								console.log("pingCellData: ", pingCellData);
+								console.log("pingCellData.pingOrig: " + pingCellData.pingOrig);
 
 
-							console.log("pingCellData: ", pingCellData);
-							console.log("pingCellData.pingOrig: " + pingCellData.pingOrig);
+								var cellId = 'tdId_' + colCounter + '_' + rowCounter;
 
+								cellIdPingHeatMap.set(cellId, pingCellData.pingHeat); // Set the HashMap entry for the cellId with the pingHeat, for coloring the table.						
 
-							var cellId = 'tdId_' + rowCounter + '_' + colCounter;
+								tableRowHTML += '<td id=' + cellId + '>'
+									+ 'Src/row: ' + pingCellData.pingOrig + '<br>Dst/col: ' + pingCellData.pingDest + '<br>'
+									+ "Pingheat:  " + pingCellData.pingHeat + '</td>';
 
-							cellIdPingHeatMap.set(cellId, pingCellData.pingHeat); // Set the HashMap entry for the cellId with the pingHeat, for coloring the table.						
+							}
+						}
+						$('#pingermatrix').append(tableRowHTML);
 
-							tableRowHTML += '<td id=' + cellId + '>'
-								+ '[Src, Dest]: ' + pingCellData.pingOrig + ', ' + pingCellData.pingDest + '<br>'
-								+ '[LastSucc, Heat]: ' + pingCellData.lastPingResult + ", " + pingCellData.pingHeat + '</td>';
+						console.log("BEFORE print PingHeat");
+
+						for (let cellIdInMap of cellIdPingHeatMap.keys()) {
+							let pingHeatInMap = cellIdPingHeatMap.get(cellIdInMap);
+							//console.log("cellIdInMap: " + cellIdInMap + ", pingHeat: " +  pingHeatInMap);
+
+							if (pingHeatInMap == 1) {
+								$('#' + cellIdInMap).css('background-color', '#FFF8DC');
+							}
+							if (pingHeatInMap == 2) {
+								$('#' + cellIdInMap).css('background-color', '#FFE4C4');
+							}
+							if (pingHeatInMap == 3) {
+								$('#' + cellIdInMap).css('background-color', '#DEB887');
+							}
+							if (pingHeatInMap == 4) {
+								$('#' + cellIdInMap).css('background-color', '#DAA520');
+							}
+							if (pingHeatInMap == 5) {
+								$('#' + cellIdInMap).css('background-color', '#CD843F');
+							}
+							if (pingHeatInMap == 6) {
+								$('#' + cellIdInMap).css('background-color', '#D2691E');
+							}
+							if (pingHeatInMap == 7) {
+								$('#' + cellIdInMap).css('background-color', '#A0522D');
+							}
+							if (pingHeatInMap == 8) {
+								$('#' + cellIdInMap).css('background-color', '#A42A2A');
+							}
+							if (pingHeatInMap == 9) {
+								$('#' + cellIdInMap).css('background-color', '#A42A2A');
+							}
+							if (pingHeatInMap == 10) {
+								$('#' + cellIdInMap).css('background-color', '#C71565');
+							}
+
 
 						}
+					},
+					error: function (data) {
+						console.log("Error occurred when trying to stringify the returned data!!");
 					}
-					$('#pingermatrix').append(tableRowHTML);
-
-					console.log("BEFORE print PingHeat");
-
-					for (let cellIdInMap of cellIdPingHeatMap.keys()) {
-						let pingHeatInMap = cellIdPingHeatMap.get(cellIdInMap);
-						//console.log("cellIdInMap: " + cellIdInMap + ", pingHeat: " +  pingHeatInMap);
-
-						if (pingHeatInMap == 1) {
-							$('#' + cellIdInMap).css('background-color', '#FFF8DC');
-						}
-						if (pingHeatInMap == 2) {
-							$('#' + cellIdInMap).css('background-color', '#FFE4C4');
-						}
-						if (pingHeatInMap == 3) {
-							$('#' + cellIdInMap).css('background-color', '#DEB887');
-						}
-						if (pingHeatInMap == 4) {
-							$('#' + cellIdInMap).css('background-color', '#DAA520');
-						}
-						if (pingHeatInMap == 5) {
-							$('#' + cellIdInMap).css('background-color', '#CD843F');
-						}
-						if (pingHeatInMap == 6) {
-							$('#' + cellIdInMap).css('background-color', '#D2691E');
-						}
-						if (pingHeatInMap == 7) {
-							$('#' + cellIdInMap).css('background-color', '#A0522D');
-						}
-						if (pingHeatInMap == 8) {
-							$('#' + cellIdInMap).css('background-color', '#A42A2A');
-						}
-						if (pingHeatInMap == 9) {
-							$('#' + cellIdInMap).css('background-color', '#A42A2A');
-						}
-						if (pingHeatInMap == 10) {
-							$('#' + cellIdInMap).css('background-color', '#C71565');
-						}
-
-
-					}
-				},
-				error: function (data) {
-					console.log("Error occurred when trying to stringify the returned data!!");
-				}
-			});// close ajax(
-}// close block poll()
+				});// close ajax(
+			}// close block poll()
 			//Hiertussen moet je dus pollen met deze rare functie:
 			pollInterval = setInterval(function () {
 				poll();
@@ -164,7 +154,5 @@
 	</script
 	<!--
 	<script type="text/javascript" src="js/devping_ajax_functions.js"></script>
-	-->
 </body>
-
 </html>
