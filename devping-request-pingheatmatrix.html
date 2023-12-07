@@ -45,7 +45,8 @@
 		$(document).ready(function () {
 			poll = function () {
 				$.ajax({
-					url: "http://localhost:8098/plainjsonpingheatmap",
+					url: "http://localhost:8099/plainjsonpingheatmap", 
+<!--					url: "http://localhost:8099/getsonpingheatmap",-->
 					method: "GET",
 					headers: {"Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*"},
 					success: function (data) {
