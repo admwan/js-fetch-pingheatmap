@@ -40,13 +40,30 @@
 		<div id=error_response></div>
 	</div>
 
+
+<!--	Dit is de URL die geformateerde JSON produceert, maar dat is niet geschikt voor de code hieronder				
+		url: "http://localhost:8099/getsonpingheatmap",
+		
+		Het moet plat en ongeformateerd zijn, zoals dit (de linebreaks heb ik er met de hand in gezet):
+		
+		{"msg":null,"pingNodeList":["LOKIFS","CAPTUW","SURFIE","THORFW","ASGAFS"],"pingMatrixData":[{"pingOrig":"LOKIFS","pingDest":"LOKIFS","pingHeat":-1},{"pingOrig":"LOKIFS","pingDest":"CAPTUW","pingHeat":-1},
+		{"pingOrig":"LOKIFS","pingDest":"SURFIE","pingHeat":-1},{"pingOrig":"LOKIFS","pingDest":"THORFW","pingHeat":-1},{"pingOrig":"LOKIFS","pingDest":"ASGAFS","pingHeat":-1},{"pingOrig":"CAPTUW","pingDest":"LOKIFS","pingHeat":3},
+		{"pingOrig":"CAPTUW","pingDest":"CAPTUW","pingHeat":3},{"pingOrig":"CAPTUW","pingDest":"SURFIE","pingHeat":3},{"pingOrig":"CAPTUW","pingDest":"THORFW","pingHeat":3},{"pingOrig":"CAPTUW","pingDest":"ASGAFS","pingHeat":3},
+		{"pingOrig":"SURFIE","pingDest":"LOKIFS","pingHeat":-1},{"pingOrig":"SURFIE","pingDest":"CAPTUW","pingHeat":-1},{"pingOrig":"SURFIE","pingDest":"SURFIE","pingHeat":-1},{"pingOrig":"SURFIE","pingDest":"THORFW","pingHeat":-1},
+		{"pingOrig":"SURFIE","pingDest":"ASGAFS","pingHeat":-1},{"pingOrig":"THORFW","pingDest":"LOKIFS","pingHeat":6},{"pingOrig":"THORFW","pingDest":"CAPTUW","pingHeat":6},{"pingOrig":"THORFW","pingDest":"SURFIE","pingHeat":6},
+		{"pingOrig":"THORFW","pingDest":"THORFW","pingHeat":6},{"pingOrig":"THORFW","pingDest":"ASGAFS","pingHeat":6},{"pingOrig":"ASGAFS","pingDest":"LOKIFS","pingHeat":-1},{"pingOrig":"ASGAFS","pingDest":"CAPTUW","pingHeat":-1},
+		{"pingOrig":"ASGAFS","pingDest":"SURFIE","pingHeat":-1},{"pingOrig":"ASGAFS","pingDest":"THORFW","pingHeat":-1},{"pingOrig":"ASGAFS","pingDest":"ASGAFS","pingHeat":-1}]}	
+		-->
+
+
 	<script type="text/javascript" src="js/jquery/3.7.1/jquery-3.7.1.js"></script>
 	<script>
 		$(document).ready(function () {
 			poll = function () {
 				$.ajax({
-					url: "http://localhost:8099/plainjsonpingheatmap", 
-<!--					url: "http://localhost:8099/getsonpingheatmap",-->
+//					url: "http://localhost:8099/plainjsonpingheatmap", 
+//					url: "http://192.168.50.107:8099/plainjsonpingheatmap", 
+					url: "http://192.168.50.107:8080/pingheatmap-jersey-rest-1.0-SNAPSHOT/plainjsonpingheatmap",
 					method: "GET",
 					headers: {"Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*"},
 					success: function (data) {
