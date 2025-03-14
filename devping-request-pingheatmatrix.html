@@ -61,9 +61,9 @@
 		$(document).ready(function () {
 			poll = function () {
 				$.ajax({
-//					url: "http://localhost:8099/plainjsonpingheatmap", 
-//					url: "http://192.168.50.107:8099/plainjsonpingheatmap", 
-					url: "http://192.168.50.107:8080/pingheatmap-jersey-rest-1.0-SNAPSHOT/plainjsonpingheatmap",
+//					url: "http://192.168.50.107:8099/plainjsonpingheatmap",  // pingheatmap-rest-service - Spring Boot app
+//					url: "http://192.168.50.107:8080/pingheatmap-jersey-rest-1.0-SNAPSHOT/plainjsonpingheatmap", // pingheatmap-jersey-rest - Tomcat WebApp
+					url: "http://192.168.50.200:8080/pingheatmap-jersey-rest-1.0-SNAPSHOT/plainjsonpingheatmap", // pingheatmap-jersey-rest - Tomcat WebApp
 					method: "GET",
 					headers: {"Accept": "application/json; odata=verbose", "Access-Control-Allow-Origin": "*"},
 					success: function (data) {
